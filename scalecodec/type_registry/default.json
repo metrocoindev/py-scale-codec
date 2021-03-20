@@ -2169,7 +2169,19 @@
         ]
       ]
     },
-    "Keys": "SessionKeysSubstrate",
+    "Keys": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "babe",
+          "H256"
+        ],
+        [
+          "grandpa",
+          "H256"
+        ]
+      ]
+    },
     "Header": {
       "type": "struct",
       "type_mapping": [
