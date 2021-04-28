@@ -1,5 +1,5 @@
 {
-  "runtime_id": 28,
+  "runtime_id": 29,
   "types": {
     "Address": "MultiAddress",
     "LookupSource": "MultiAddress",
@@ -135,6 +135,18 @@
           ]
         },
         "ValidatorPrefs": "ValidatorPrefsWithBlocked"
+      }
+    },
+    {
+      "runtime_range": [28, 29],
+      "types": {
+        "AccountInfo": "AccountInfoWithDualRefCount"
+      }
+    },
+    {
+      "runtime_range": [30, null],
+      "types": {
+        "AccountInfo": "AccountInfoWithTripleRefCount"
       }
     }
   ]
