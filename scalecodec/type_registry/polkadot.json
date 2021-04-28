@@ -1,9 +1,9 @@
 {
-  "runtime_id": 28,
+  "runtime_id": 29,
   "types": {
     "Address": "MultiAddress",
     "LookupSource": "MultiAddress",
-    "AccountInfo": "AccountInfoWithProviders",
+    "AccountInfo": "AccountInfoWithDualRefCount",
     "BlockNumber": "U32",
     "LeasePeriod": "BlockNumber",
     "Weight": "u64",
@@ -122,7 +122,7 @@
       "types": {
         "Address": "MultiAddress",
         "LookupSource": "MultiAddress",
-        "AccountInfo": "AccountInfoWithProviders",
+        "AccountInfo": "AccountInfoWithDualRefCount",
         "Keys": {
           "type": "struct",
           "type_mapping": [
@@ -135,6 +135,18 @@
           ]
         },
         "ValidatorPrefs": "ValidatorPrefsWithBlocked"
+      }
+    },
+    {
+      "runtime_range": [28, 29],
+      "types": {
+        "AccountInfo": "AccountInfoWithDualRefCount"
+      }
+    },
+    {
+      "runtime_range": [30, null],
+      "types": {
+        "AccountInfo": "AccountInfoWithTripleRefCount"
       }
     }
   ]

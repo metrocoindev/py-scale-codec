@@ -53,13 +53,16 @@ class RuntimeConfigurationObject:
     @classmethod
     def convert_type_string(cls, name):
 
-        name = re.sub(r'T::', "", name)
-        name = re.sub(r'<T>', "", name)
-        name = re.sub(r'<T as Trait>::', "", name)
-        name = re.sub(r'<T as Config>::', "", name)
-        name = re.sub(r'<T as Config<I>>::', "", name)
+        name = re.sub(r'T::', "", name, flags=re.IGNORECASE)
+        name = re.sub(r'<T>', "", name, flags=re.IGNORECASE)
+        name = re.sub(r'<T as Trait>::', "", name, flags=re.IGNORECASE)
+        name = re.sub(r'<T as Trait<I>>::', "", name, flags=re.IGNORECASE)
+        name = re.sub(r'<T as Config>::', "", name, flags=re.IGNORECASE)
+        name = re.sub(r'<T as Config<I>>::', "", name, flags=re.IGNORECASE)
         name = re.sub(r'\n', "", name)
-        name = re.sub(r'(grandpa|session|slashing|limits)::', "", name)
+        name = re.sub(r'(grandpa|session|slashing|limits|beefy_primitives|opaque)::', "", name)
+        name = re.sub(r'VecDeque<', "Vec<", name, flags=re.IGNORECASE)
+        name = re.sub(r'^Box<(.+)>$', r'\1', name, flags=re.IGNORECASE)
 
         if name == '()':
             return "Null"
@@ -317,11 +320,12 @@ class ScaleDecoder(ABC):
         if data:
             assert(type(data) == ScaleBytes)
 
-        if not runtime_config:
-            # if no runtime config is provided, fallback on singleton
-            runtime_config = RuntimeConfiguration()
+        if runtime_config:
+            self.runtime_config = runtime_config
 
-        self.runtime_config = runtime_config
+        if not self.runtime_config:
+            # if no runtime config is provided, fallback on singleton
+            self.runtime_config = RuntimeConfiguration()
 
         self.data = data
         self.raw_value = ''
@@ -392,10 +396,10 @@ class ScaleDecoder(ABC):
         return self.value
 
     def __str__(self):
-        return str(self.value) or ''
+        return str(self.serialize()) or ''
 
     def __repr__(self):
-        return "<{}(value={})>".format(self.__class__.__name__, self.value)
+        return "<{}(value={})>".format(self.__class__.__name__, self.serialize())
 
     def encode(self, value=None):
 
@@ -428,7 +432,7 @@ class ScaleDecoder(ABC):
             runtime_config = RuntimeConfiguration()
 
         decoder_class = runtime_config.get_decoder_class(
-            type_string.lower(),
+            type_string,
             spec_version_id=kwargs.get('spec_version_id', 'default')
         )
         if decoder_class:
