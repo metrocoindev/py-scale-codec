@@ -366,7 +366,7 @@ class ScaleDecoder(ABC):
     def get_next_bool(self):
         data = self.get_next_bytes(1)
         if data not in [b'\x00', b'\x01']:
-            raise InvalidScaleTypeValueException('Invalid value for datatype "bool"')
+            raise InvalidScaleTypeValueException('Invalid value {} for datatype "bool"'.format(data))
         return data == b'\x01'
 
     def get_remaining_bytes(self):
